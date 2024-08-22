@@ -10,7 +10,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float moveSpeed;       // meter per sec
     [SerializeField] private float rotationSpeed;
 
-    [Header("Input Values")]
+    [Header("Raycast Args")]
+    [SerializeField] private float rayStartHeight;
+    [SerializeField] private float rayLength;
+
+    [Header("DEBUG : Input Values")]
     [SerializeField] private float vertInput = 0f;
     [SerializeField] private float horzInput = 0f;
     [SerializeField] private float vertInputM = 0f;
@@ -26,6 +30,8 @@ public class PlayerController : MonoBehaviour
     private void Update()
     {
         GetAxisInput();
+
+        GetRaycastFacility();
 
     }
 
@@ -66,5 +72,16 @@ public class PlayerController : MonoBehaviour
         rigid.MovePosition(transform.position + new Vector3(horzInput, 0, vertInput) * moveSpeed * Time.deltaTime * diagW);
     }
 
+
+    private void GetRaycastFacility()
+    {
+        RaycastHit hit;
+
+        if (Physics.Raycast(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward), out hit, rayLength, Constants.LAYER_FACILITY))
+        {
+            if (Input.GetKeyDown(KeyCode.F)) Debug.Log(hit.transform.name);
+        }
+        Debug.DrawRay(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward) * rayLength, Color.red);
+    }
 
 }
