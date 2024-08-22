@@ -3,8 +3,8 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour
 {
-    private Animator animator;
-    private Rigidbody rigid;
+    public Animator animator;
+    public Rigidbody rigid;
 
     [Header("Player Move Args")]
     [SerializeField] private float moveSpeed;       // meter per sec
@@ -14,66 +14,56 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rayStartHeight;
     [SerializeField] private float rayLength;
 
-    [Header("DEBUG : Input Values")]
-    [SerializeField] private float vertInput = 0f;
-    [SerializeField] private float horzInput = 0f;
-    [SerializeField] private float vertInputM = 0f;
-    [SerializeField] private float horzInputM = 0f;
 
+    private PlayerStateMachine stateMachine;
+    public WorkState workState;
+    public IdleState idleState;
+    public RunState runState;
+    public RollState rollState;
 
     private void Start()
     {
         animator = GetComponent<Animator>();
         rigid = GetComponent<Rigidbody>();
+
+        stateMachine = new PlayerStateMachine();
+
+        workState = new WorkState(this, stateMachine);
+        idleState = new IdleState(this, stateMachine);
+        runState = new RunState(this, stateMachine);
+        rollState = new RollState(this, stateMachine);
+
+        stateMachine.Init(idleState);
+
     }
 
     private void Update()
     {
-        GetAxisInput();
+        stateMachine.CurState.HandleInput();
 
-        GetRaycastFacility();
-
+        stateMachine.CurState.LogicUpdate();
     }
 
-    bool isIncreasing = false;
-
-    private void GetAxisInput()
+    private void FixedUpdate()
     {
-        vertInput = Input.GetAxisRaw("Vertical");
-        horzInput = Input.GetAxisRaw("Horizontal");
-        vertInputM = Input.GetAxis("Vertical");
-        horzInputM = Input.GetAxis("Horizontal");
-
-
-        float speed = Mathf.Abs(vertInput) + Mathf.Abs(horzInput);
-        float speedM = Mathf.Abs(vertInputM) + Mathf.Abs(horzInputM);
-
-        if (Mathf.Approximately(speed, 0f)) isIncreasing = true;
-        if (speedM > 1f) isIncreasing = false;
-
-        if (isIncreasing)
-        {
-            vertInput = vertInputM; horzInput = horzInputM;
-        }
-       
-
-        animator.SetFloat(Constants.ANIM_PARAM_SPEED, speed);
-
-        float diagW = (Mathf.Abs(horzInput) > 0.5f && Mathf.Abs(vertInput) > 0.5f) ? 0.71f : 1.0f;
-
-        if(Mathf.Abs(horzInput) > 0.5f || Mathf.Abs(vertInput) > 0.5f)
-        {
-            Quaternion targetRotation = Quaternion.LookRotation(new Vector3(horzInput, 0, vertInput));
-
-            transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
-        }
-        
-
-        rigid.MovePosition(transform.position + new Vector3(horzInput, 0, vertInput) * moveSpeed * Time.deltaTime * diagW);
+        stateMachine.CurState.PhysicsUpdate();
     }
 
 
-    private void GetRaycastFacility()
+
+
+    public void Move(Vector3 direction)
+    {
+       rigid.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
+    }
+
+    public void RotationSlerp(Quaternion targetRotation)
+    {
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
+    }
+
+
+    public void GetRaycastFacility()
     {
         RaycastHit hit;
 

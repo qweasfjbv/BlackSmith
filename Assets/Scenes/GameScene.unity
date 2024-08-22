@@ -367,14 +367,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef116a89cfc525b439d17752598044a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 30
+  animator: {fileID: 0}
+  rigid: {fileID: 0}
+  moveSpeed: 5
   rotationSpeed: 20
   rayStartHeight: 0.5
   rayLength: 1.2
-  vertInput: 0
-  horzInput: 0
-  vertInputM: 0
-  horzInputM: 0
 --- !u!1 &449170000 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 919132149155446097, guid: 8d2c90bfe34335e44b8a0ab9891d9f42, type: 3}
