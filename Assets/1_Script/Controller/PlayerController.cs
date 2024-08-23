@@ -1,3 +1,4 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
 
@@ -9,10 +10,17 @@ public class PlayerController : MonoBehaviour
     [Header("Player Move Args")]
     [SerializeField] private float moveSpeed;       // meter per sec
     [SerializeField] private float rotationSpeed;
+    [SerializeField] private float rollSpeed;
+    [SerializeField] private float rollDuration;
 
     [Header("Raycast Args")]
     [SerializeField] private float rayStartHeight;
     [SerializeField] private float rayLength;
+    [SerializeField] private FacilityInteractUI facInteractUI;
+    
+
+    public float RollDuration { get => rollDuration; }
+    public FacilityInteractUI FacInteractUI { get => facInteractUI; }
 
 
     private PlayerStateMachine stateMachine;
@@ -20,6 +28,18 @@ public class PlayerController : MonoBehaviour
     public IdleState idleState;
     public RunState runState;
     public RollState rollState;
+
+    private bool isDetectFacility = false;
+    public bool IsDetectFacility { get => isDetectFacility; }
+
+    
+    /// <summary>
+    /// recently detected facility by raycast
+    /// used in state scripts to set popup UI
+    /// </summary>
+    private FacilityBase recentFacility = null;
+    public FacilityBase RecentFacility { get => recentFacility; }
+
 
     private void Start()
     {
@@ -39,9 +59,12 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
+
+
         stateMachine.CurState.HandleInput();
 
         stateMachine.CurState.LogicUpdate();
+
     }
 
     private void FixedUpdate()
@@ -56,6 +79,10 @@ public class PlayerController : MonoBehaviour
     {
        rigid.MovePosition(transform.position + direction * moveSpeed * Time.fixedDeltaTime);
     }
+    public void Roll(Vector3 direction)
+    {
+        rigid.MovePosition(transform.position + direction * rollSpeed * Time.fixedDeltaTime);
+    }
 
     public void RotationSlerp(Quaternion targetRotation)
     {
@@ -69,9 +96,28 @@ public class PlayerController : MonoBehaviour
 
         if (Physics.Raycast(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward), out hit, rayLength, Constants.LAYER_FACILITY))
         {
-            if (Input.GetKeyDown(KeyCode.F)) Debug.Log(hit.transform.name);
+
+            facInteractUI.gameObject.SetActive(true);
+            recentFacility = hit.transform.GetComponent<FacilityBase>();
+            isDetectFacility = true;
+
         }
+        else
+        {
+            if (facInteractUI.gameObject.activeSelf) facInteractUI.gameObject.SetActive(false);
+            isDetectFacility = false;
+        }
+
+        // if (facInteractUI.gameObject.activeSelf && Input.GetKeyDown(KeyCode.F)) Debug.Log(hit.transform.name);
+
         Debug.DrawRay(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward) * rayLength, Color.red);
+    }
+
+    // Switch Any state to IDLE (Animation, NOT StateMachine)
+    public void EraseAllAnimParam()
+    {
+        animator.SetBool(Constants.ANIM_PARAM_RUN, false);
+        animator.SetBool(Constants.ANIM_PARAM_ROLL, false);
     }
 
 }

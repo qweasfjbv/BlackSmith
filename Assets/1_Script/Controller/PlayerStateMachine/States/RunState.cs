@@ -27,11 +27,15 @@ public class RunState : StateBase
         diagW = 1.0f;
         isIncreasing = true;
 
+        controller.animator.SetBool(Constants.ANIM_PARAM_RUN, true);
+
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        //controller.animator.SetBool(Constants.ANIM_PARAM_RUN, false);
     }
 
     public override void HandleInput()
@@ -43,12 +47,24 @@ public class RunState : StateBase
         vertInputM = Input.GetAxis("Vertical");
         horzInputM = Input.GetAxis("Horizontal");
 
+        if (Input.GetKeyDown(KeyCode.LeftControl) && !isIncreasing)
+        {
+            stateMachine.ChangeState(controller.rollState);
+        }
+
+        if (controller.IsDetectFacility && Input.GetKeyDown(KeyCode.F))
+        {
+            stateMachine.ChangeState(controller.workState);
+        }
+
+
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
 
+        Debug.Log("STATE : RUN");
 
         float speed = Mathf.Abs(vertInput) + Mathf.Abs(horzInput);
         float speedM = Mathf.Abs(vertInputM) + Mathf.Abs(horzInputM);
@@ -64,14 +80,13 @@ public class RunState : StateBase
             vertInput = vertInputM; horzInput = horzInputM;
         }
 
-
-        controller.animator.SetFloat(Constants.ANIM_PARAM_SPEED, speed);
-
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+
+        controller.GetRaycastFacility();
 
         if (Mathf.Abs(horzInput) > 0.5f || Mathf.Abs(vertInput) > 0.5f)
         {

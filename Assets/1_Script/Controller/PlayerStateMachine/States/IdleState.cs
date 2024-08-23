@@ -18,6 +18,9 @@ public class IdleState : StateBase
     {
         base.Enter();
         controller.GetComponent<Animator>().SetFloat(Constants.ANIM_PARAM_SPEED, 0);
+
+        controller.animator.SetBool(Constants.ANIM_PARAM_ROLL, false);
+        controller.animator.SetBool(Constants.ANIM_PARAM_RUN, false);
     }
 
     public override void Exit()
@@ -32,19 +35,26 @@ public class IdleState : StateBase
         vertInput = Input.GetAxisRaw("Vertical");
         horzInput = Input.GetAxisRaw("Horizontal");
 
+
+        if (controller.IsDetectFacility && Input.GetKeyDown(KeyCode.F))
+        {
+            stateMachine.ChangeState(controller.workState);
+        }
+
     }
 
     public override void LogicUpdate()
     {
         base.LogicUpdate();
-        Debug.Log("IDLE STATTE RUNNIGN" +vertInput);
 
+        Debug.Log("STATE : IDLE");
         if (Mathf.Abs(vertInput) >= 0.9f ||Mathf.Abs(horzInput) >= 0.9f) stateMachine.ChangeState(controller.runState);
     }
 
     public override void PhysicsUpdate()
     {
         base.PhysicsUpdate();
+        controller.GetRaycastFacility();
     }
 
 }

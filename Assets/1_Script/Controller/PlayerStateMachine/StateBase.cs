@@ -1,8 +1,6 @@
 
 public class StateBase
 {
-
-
     protected PlayerController controller;
     protected PlayerStateMachine stateMachine;
 
@@ -12,29 +10,9 @@ public class StateBase
         this.stateMachine = stateMachine;
     }
 
-    public virtual void Enter()
-    {
-
-    }
-
-    public virtual void HandleInput()
-    {
-
-    }
-
-    public virtual void LogicUpdate()
-    {
-
-    }
-
-    public virtual void PhysicsUpdate()
-    {
-
-    }
-
-    public virtual void Exit()
-    {
-
-    }
-
+    public virtual void Enter() {}
+    public virtual void HandleInput() {}
+    public virtual void LogicUpdate() {}
+    public virtual void PhysicsUpdate() {}
+    public virtual void Exit() {}
 }
