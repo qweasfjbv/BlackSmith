@@ -17,10 +17,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float rayStartHeight;
     [SerializeField] private float rayLength;
     [SerializeField] private FacilityInteractUI facInteractUI;
+    [SerializeField] private WorkUI facWorktUI;
     
 
     public float RollDuration { get => rollDuration; }
     public FacilityInteractUI FacInteractUI { get => facInteractUI; }
+    public WorkUI FacWorkUI { get => facWorktUI; }
 
 
     private PlayerStateMachine stateMachine;

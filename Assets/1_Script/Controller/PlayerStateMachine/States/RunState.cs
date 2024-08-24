@@ -73,7 +73,7 @@ public class RunState : StateBase
         {
             stateMachine.ChangeState(controller.idleState);
         }
-        if (speedM > 1f) isIncreasing = false;
+        if (speedM > 0.9f) isIncreasing = false;
 
         if (isIncreasing)
         {

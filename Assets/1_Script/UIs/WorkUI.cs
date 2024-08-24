@@ -7,6 +7,10 @@ public class WorkUI : MonoBehaviour
 
     [SerializeField] private Transform player;
 
+    [SerializeField] private GameObject timingPin;
+    [SerializeField] private GameObject corrTImingPrefab;
+
+
     private void Awake()
     {
         gameObject.SetActive(false);
@@ -20,9 +24,14 @@ public class WorkUI : MonoBehaviour
         Debug.Log("Set!! : " + facId);
     }
 
+    public void SetPinPos(float ratio)
+    {
+
+    }
+
     void Update()
     {
-        transform.position = player.position + new Vector3(1.2f, 1, 0);
+        transform.position = player.position + new Vector3(0, 2.5f, -0.5f);
         transform.rotation = Camera.main.transform.rotation;
     }
 }

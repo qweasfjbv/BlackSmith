@@ -10,29 +10,32 @@ public class WorkState : StateBase
 
     }
 
-    private FacilityBase interactingFacility = null;
+    private FacilityBase facility = null;
 
     public override void Enter()
     {
         base.Enter();
 
-        interactingFacility = controller.RecentFacility;
+        facility = controller.RecentFacility;
         controller.FacInteractUI.gameObject.SetActive(false);
+        controller.FacWorkUI.gameObject.SetActive(true);
     }
 
     public override void Exit()
     {
         base.Exit();
+
+        controller.FacWorkUI.gameObject.SetActive(false);
     }
 
     public override void HandleInput()
     {
         base.HandleInput();
 
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            // TODO : Hit timing;
-        }
+        Debug.Log(facility.name);
+
+        if (facility != null) facility.OnUpdate();
+        else stateMachine.ChangeState(controller.idleState);
 
         if (Input.GetKeyDown(KeyCode.Escape))    // Escape Work state 
         {
