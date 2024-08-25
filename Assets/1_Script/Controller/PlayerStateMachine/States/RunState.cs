@@ -52,9 +52,10 @@ public class RunState : StateBase
             stateMachine.ChangeState(controller.rollState);
         }
 
-        if (controller.IsDetectFacility && Input.GetKeyDown(KeyCode.F))
+        if (Input.GetKeyDown(KeyCode.F))
         {
-            stateMachine.ChangeState(controller.workState);
+            if (controller.IsDetectFacility) stateMachine.ChangeState(controller.workState);
+            if (controller.IsDetectResource) stateMachine.ChangeState(controller.mineState);
         }
 
 

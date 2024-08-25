@@ -11,11 +11,6 @@ public class WorkUI : MonoBehaviour
     [SerializeField] private GameObject corrTImingPrefab;
 
 
-    private void Awake()
-    {
-        gameObject.SetActive(false);
-    }
-
     public void SetWorkUI(int facId, Transform player)
     {
         this.player = player;

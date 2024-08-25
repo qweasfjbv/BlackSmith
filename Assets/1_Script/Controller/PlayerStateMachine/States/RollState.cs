@@ -34,7 +34,7 @@ public class RollState : StateBase
         base.Exit();
 
         controller.animator.SetBool(Constants.ANIM_PARAM_ROLL, false);
-        controller.animator.SetFloat("Speed", 1.0f);
+        controller.animator.speed = 1.0f;
     }
 
     public override void HandleInput()
@@ -51,7 +51,7 @@ public class RollState : StateBase
         Debug.Log("STATE : ROLL");
         elapsedTime += Time.deltaTime;
 
-        if (elapsedTime > controller.RollDuration * 0.9) stateMachine.ChangeState(controller.idleState);
+        if (elapsedTime > controller.RollDuration * 0.7) stateMachine.ChangeState(controller.idleState);
 
     }
 
@@ -77,7 +77,7 @@ public class RollState : StateBase
         }
 
 
-        controller.animator.SetFloat("Speed", rollClip.length / controller.RollDuration);
+        controller.animator.speed = rollClip.length / controller.RollDuration;
         controller.animator.SetBool(Constants.ANIM_PARAM_ROLL, true);
     }
 

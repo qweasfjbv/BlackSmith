@@ -16,6 +16,9 @@ public class WorkState : StateBase
     {
         base.Enter();
 
+        controller.EraseAllAnimParam();
+        controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, true);
+
         facility = controller.RecentFacility;
         controller.FacInteractUI.gameObject.SetActive(false);
         controller.FacWorkUI.gameObject.SetActive(true);
@@ -26,6 +29,7 @@ public class WorkState : StateBase
         base.Exit();
 
         controller.FacWorkUI.gameObject.SetActive(false);
+        controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, false);
     }
 
     public override void HandleInput()

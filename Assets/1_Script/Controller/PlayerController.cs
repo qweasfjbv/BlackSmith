@@ -30,17 +30,23 @@ public class PlayerController : MonoBehaviour
     public IdleState idleState;
     public RunState runState;
     public RollState rollState;
+    public MineState mineState;
 
     private bool isDetectFacility = false;
     public bool IsDetectFacility { get => isDetectFacility; }
 
-    
+    private bool isDetectResource = false;
+    public bool IsDetectResource { get => isDetectResource; }
+
+
     /// <summary>
     /// recently detected facility by raycast
     /// used in state scripts to set popup UI
     /// </summary>
     private FacilityBase recentFacility = null;
     public FacilityBase RecentFacility { get => recentFacility; }
+    private ResourceBase recentResource = null;
+    public ResourceBase RecentResource { get => recentResource; }
 
 
     private void Start()
@@ -51,9 +57,10 @@ public class PlayerController : MonoBehaviour
         stateMachine = new PlayerStateMachine();
 
         workState = new WorkState(this, stateMachine);
-        idleState = new IdleState(this, stateMachine);
+        idleState = new IdleState(this, stateMachine); 
         runState = new RunState(this, stateMachine);
         rollState = new RollState(this, stateMachine);
+        mineState = new MineState(this, stateMachine);
 
         stateMachine.Init(idleState);
 
@@ -61,18 +68,16 @@ public class PlayerController : MonoBehaviour
 
     private void Update()
     {
-
-
         stateMachine.CurState.HandleInput();
 
         stateMachine.CurState.LogicUpdate();
-
     }
 
     private void FixedUpdate()
     {
         stateMachine.CurState.PhysicsUpdate();
     }
+
 
 
 
@@ -96,21 +101,35 @@ public class PlayerController : MonoBehaviour
     {
         RaycastHit hit;
 
-        if (Physics.Raycast(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward), out hit, rayLength, Constants.LAYER_FACILITY))
+        int targetLayer = Constants.LAYER_FACILITY | Constants.LAYER_RESOURCE;
+
+        if (Physics.Raycast(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward), out hit, rayLength, targetLayer))
         {
 
             facInteractUI.gameObject.SetActive(true);
-            recentFacility = hit.transform.GetComponent<FacilityBase>();
-            isDetectFacility = true;
+
+            switch (1 << hit.transform.gameObject.layer) {
+                case Constants.LAYER_FACILITY:
+                    recentFacility = hit.transform.GetComponent<FacilityBase>();
+                    recentResource = null;
+                    isDetectFacility = true;
+                    isDetectResource = false;
+                    break;
+                case Constants.LAYER_RESOURCE:
+                    recentFacility = null;
+                    recentResource = hit.transform.GetComponent<ResourceBase>();
+                    isDetectResource = true;
+                    isDetectFacility = false;
+                    break;
+            }
 
         }
         else
         {
             if (facInteractUI.gameObject.activeSelf) facInteractUI.gameObject.SetActive(false);
             isDetectFacility = false;
+            isDetectResource = false;
         }
-
-        // if (facInteractUI.gameObject.activeSelf && Input.GetKeyDown(KeyCode.F)) Debug.Log(hit.transform.name);
 
         Debug.DrawRay(transform.position + new Vector3(0, rayStartHeight, 0), transform.TransformDirection(Vector3.forward) * rayLength, Color.red);
     }
