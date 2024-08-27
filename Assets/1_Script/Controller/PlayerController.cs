@@ -96,6 +96,10 @@ public class PlayerController : MonoBehaviour
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, rotationSpeed * Time.deltaTime);
     }
 
+    public void SetRotation(Vector3 vector3)
+    {
+        transform.rotation = Quaternion.Euler(vector3);
+    }
 
     public void GetRaycastFacility()
     {

@@ -6,15 +6,14 @@ public class Resource_Mineral : ResourceBase
 {
     private void Awake()
     {
-        animParam = Constants.ANIM_PARAM_MINE;
-        actionTime = 0.45f;
+        SetResourceInfo(Constants.ANIM_PARAM_MINE, Constants.ANIM_CLIPNAME_MINE, 0.45f, 0f);
     }
 
     public override int GetResource()
     {
 
         // TODO : PLAY SOUND
-        Debug.Log("±ø!");
+        Debug.Log("GGANG!");
         return -1;
     }
 
