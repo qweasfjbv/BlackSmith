@@ -1,16 +1,16 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
 
-public class ResourceTest : ResourceBase
+namespace Resource
 {
-    public override int GetResource()
+    public class ResourceTest : ResourceBase
     {
-        return -1;
-    }
+        public override int GetResource()
+        {
+            return -1;
+        }
 
-    public override void OnUpdate()
-    {
+        public override void OnUpdate()
+        {
 
+        }
     }
 }

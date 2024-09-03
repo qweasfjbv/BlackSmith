@@ -1,24 +1,24 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Resource_Mineral : ResourceBase
+namespace Resource
 {
-    private void Awake()
+    public class Resource_Mineral : ResourceBase
     {
-        SetResourceInfo(Constants.ANIM_PARAM_MINE, Constants.ANIM_CLIPNAME_MINE, 0.45f, 0f);
-    }
+        private void Awake()
+        {
+            SetResourceInfo(Constants.ANIM_PARAM_MINE, Constants.ANIM_CLIPNAME_MINE, 0.45f, 0f);
+        }
 
-    public override int GetResource()
-    {
+        public override int GetResource()
+        {
+            // TODO : PLAY SOUND
+            Debug.Log("GGANG!");
+            return -1;
+        }
 
-        // TODO : PLAY SOUND
-        Debug.Log("GGANG!");
-        return -1;
-    }
+        public override void OnUpdate()
+        {
 
-    public override void OnUpdate()
-    {
-
+        }
     }
 }

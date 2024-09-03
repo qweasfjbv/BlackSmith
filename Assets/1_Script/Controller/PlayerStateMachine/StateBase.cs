@@ -1,18 +1,23 @@
+using Controller;
 
-public class StateBase
+namespace StateMachine.State
 {
-    protected PlayerController controller;
-    protected PlayerStateMachine stateMachine;
-
-    public StateBase(PlayerController controller, PlayerStateMachine stateMachine)
+    public class StateBase
     {
-        this.controller = controller;
-        this.stateMachine = stateMachine;
+        protected PlayerController controller;
+        protected PlayerStateMachine stateMachine;
+
+        public StateBase(PlayerController controller, PlayerStateMachine stateMachine)
+        {
+            this.controller = controller;
+            this.stateMachine = stateMachine;
+        }
+
+        public virtual void Enter() { }
+        public virtual void HandleInput() { }
+        public virtual void LogicUpdate() { }
+        public virtual void PhysicsUpdate() { }
+        public virtual void Exit() { }
     }
 
-    public virtual void Enter() {}
-    public virtual void HandleInput() {}
-    public virtual void LogicUpdate() {}
-    public virtual void PhysicsUpdate() {}
-    public virtual void Exit() {}
 }

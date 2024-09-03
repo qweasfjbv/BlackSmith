@@ -1,23 +1,25 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+using StateMachine.State;
 
-public class PlayerStateMachine
+namespace StateMachine
 {
-    private StateBase curState;
-    public StateBase CurState { get { return curState; } }  
-
-    public void Init(StateBase startState)
+    public class PlayerStateMachine
     {
-        curState = startState;
-        startState.Enter();
+        private StateBase curState;
+        public StateBase CurState { get { return curState; } }
+
+        public void Init(StateBase startState)
+        {
+            curState = startState;
+            startState.Enter();
+        }
+
+        public void ChangeState(StateBase newState)
+        {
+            curState.Exit();
+
+            curState = newState;
+            newState.Enter();
+        }
     }
 
-    public void ChangeState(StateBase newState)
-    {
-        curState.Exit();
-
-        curState = newState;
-        newState.Enter();
-    }
 }

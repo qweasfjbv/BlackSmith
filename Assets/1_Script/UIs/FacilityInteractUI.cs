@@ -1,28 +1,30 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
-public class FacilityInteractUI : MonoBehaviour
+namespace UI.Field
 {
-
-    [SerializeField] private Transform player;
-
-    private void Awake()
+    public class FacilityInteractUI : MonoBehaviour
     {
-        gameObject.SetActive(false);
+
+        [SerializeField] private Transform player;
+
+        private void Awake()
+        {
+            gameObject.SetActive(false);
+        }
+
+        public void SetInteractUI(int facId, Transform player)
+        {
+            this.player = player;
+
+            // TODO : write on TMP
+            Debug.Log("Set!! : " + facId);
+        }
+
+        private void Update()
+        {
+            transform.position = player.position + new Vector3(1.2f, 1, 0);
+            transform.rotation = Camera.main.transform.rotation;
+        }
     }
 
-    public void SetInteractUI(int facId, Transform player)
-    {
-        this.player = player;
-
-        // TODO : write on TMP
-        Debug.Log("Set!! : " + facId);
-    }
-
-    private void Update()
-    {
-        transform.position = player.position + new Vector3(1.2f, 1, 0);
-        transform.rotation = Camera.main.transform.rotation;
-    }
 }

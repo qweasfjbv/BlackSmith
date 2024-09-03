@@ -1,62 +1,68 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using Controller;
+using Facility;
 
-public class WorkState : StateBase
+namespace StateMachine.State
 {
-    public WorkState(PlayerController controller, PlayerStateMachine stateMachine)
-        : base(controller, stateMachine)
+    public class WorkState : StateBase
     {
-
-    }
-
-    private FacilityBase facility = null;
-
-    public override void Enter()
-    {
-        base.Enter();
-
-        controller.EraseAllAnimParam();
-        controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, true);
-
-        facility = controller.RecentFacility;
-        controller.FacInteractUI.gameObject.SetActive(false);
-        controller.FacWorkUI.gameObject.SetActive(true);
-    }
-
-    public override void Exit()
-    {
-        base.Exit();
-
-        controller.FacWorkUI.gameObject.SetActive(false);
-        controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, false);
-    }
-
-    public override void HandleInput()
-    {
-        base.HandleInput();
-
-        Debug.Log(facility.name);
-
-        if (facility != null) facility.OnUpdate();
-        else stateMachine.ChangeState(controller.idleState);
-
-        if (Input.GetKeyDown(KeyCode.Escape))    // Escape Work state 
+        public WorkState(PlayerController controller, PlayerStateMachine stateMachine)
+            : base(controller, stateMachine)
         {
-            stateMachine.ChangeState(controller.idleState);
+
         }
 
-    }
+        private FacilityBase facility = null;
 
-    public override void LogicUpdate()
-    {
-        base.LogicUpdate();
+        public override void Enter()
+        {
+            base.Enter();
 
-    }
+            controller.EraseAllAnimParam();
+            controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, true);
+            controller.animator.SetBool(facility.AnimParam, true);
 
-    public override void PhysicsUpdate()
-    {
-        base.PhysicsUpdate();
+            facility = controller.RecentFacility;
+            controller.FacInteractUI.gameObject.SetActive(false);
+            controller.FacWorkUI.gameObject.SetActive(true);
+        }
+
+        public override void Exit()
+        {
+            base.Exit();
+
+            controller.FacWorkUI.gameObject.SetActive(false);
+            controller.animator.SetBool(facility.AnimParam, false);
+            controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, false);
+        }
+
+        public override void HandleInput()
+        {
+            base.HandleInput();
+
+            Debug.Log(facility.name);
+
+            if (facility != null) facility.OnUpdate();
+            else stateMachine.ChangeState(controller.idleState);
+
+            if (Input.GetKeyDown(KeyCode.Escape))    // Escape Work state 
+            {
+                stateMachine.ChangeState(controller.idleState);
+            }
+
+        }
+
+        public override void LogicUpdate()
+        {
+            base.LogicUpdate();
+
+        }
+
+        public override void PhysicsUpdate()
+        {
+            base.PhysicsUpdate();
+        }
+
     }
 
 }
