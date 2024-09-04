@@ -1,6 +1,3 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UI.Field;
 
@@ -14,24 +11,36 @@ namespace Facility
         protected float maxTiming;          // Timing UI looks circle.
         protected float elapsedTiming;      // current pin location (modular needed)
         protected float timingSpeed;        // pin move speed;
-        protected float correctTiming;      // 
+        protected float correctTimingRatio;      // 
         protected float correctTimingRange; // Doubled to right and left
 
         protected string animParam;
         public string AnimParam { get => animParam; }
 
+
+        public abstract void ShowWorkUI();      // Show appropriate UI
+        public abstract int ReturnItem(int itemId1, int itemId2);  // Return appropriate item with facilityId, itemId1, 2
+        public abstract void OnEnter();
+        public abstract void OnExit();
+        public abstract void UpdateElapsedTiming();
+
+        public void SetFacilityUI(WorkUI workUI)
+        {
+            this.workUI = workUI;
+
+            workUI.SetTiming(maxTiming, correctTimingRatio, correctTimingRange);
+        }
         protected void SetFacilityAnimInfo(string animParam)
         {
             this.animParam = animParam;
         }
 
-        protected void SetFacilityTimingInfo(WorkUI workUI, float timingSpeed = 1f, float correctTIming = 0.5f, float correctTImingRange = 5f)
+        protected void SetFacilityTimingInfo(float timingSpeed = 100f, float correctTImingRatio = 0.5f, float correctTImingRange = 20f)
         {
-            this.workUI = workUI;
             this.maxTiming = 100f;
             this.elapsedTiming = 0f; // by default
             this.timingSpeed = timingSpeed;
-            this.correctTiming = correctTIming; // half by default
+            this.correctTimingRatio = correctTImingRatio; // half(0.5f) by default
             this.correctTimingRange = correctTImingRange;
         }
 
@@ -40,10 +49,12 @@ namespace Facility
 
         }
 
-        public abstract void ShowWorkUI();      // Show appropriate UI
-        public abstract void SetFacilityUI();   // Set timing vars (maybe called in ShowWorkUI)
-        public abstract void OnUpdate();        // Get Input during interacting (ex. space to timing)
-        public abstract int ReturnItem(int itemId1, int itemId2);  // Return appropriate item with facilityId, itemId1, 2
+        public virtual void OnUpdate()          // Get Input during interacting (ex. space to timing)
+        {
+            UpdateElapsedTiming();
+            workUI.SetPinPos(elapsedTiming / maxTiming);
+
+        }
 
     }
 

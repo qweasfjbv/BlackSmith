@@ -4,7 +4,6 @@ using Resource;
 
 namespace StateMachine.State
 {
-
     public class MineState : StateBase
     {
         public MineState(PlayerController controller, PlayerStateMachine stateMachine)

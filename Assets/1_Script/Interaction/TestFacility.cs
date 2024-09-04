@@ -4,8 +4,19 @@ namespace Facility
 {
     public class TestFacility : FacilityBase
     {
+        public override void OnEnter()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public override void OnExit()
+        {
+            throw new System.NotImplementedException();
+        }
+
         public override void OnUpdate()
         {
+            base.OnUpdate();
             if (Input.GetKeyDown(KeyCode.Space))
             {
                 Debug.Log("TIMING BUTTON PRESSED!");
@@ -17,12 +28,13 @@ namespace Facility
             throw new System.NotImplementedException();
         }
 
-        public override void SetFacilityUI()
+
+        public override void ShowWorkUI()
         {
             throw new System.NotImplementedException();
         }
 
-        public override void ShowWorkUI()
+        public override void UpdateElapsedTiming()
         {
             throw new System.NotImplementedException();
         }

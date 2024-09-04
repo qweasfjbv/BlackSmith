@@ -17,12 +17,15 @@ namespace StateMachine.State
         public override void Enter()
         {
             base.Enter();
+            facility = controller.RecentFacility;
+            facility.SetFacilityUI(controller.FacWorkUI);
+            facility.OnEnter();
 
             controller.EraseAllAnimParam();
             controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, true);
             controller.animator.SetBool(facility.AnimParam, true);
 
-            facility = controller.RecentFacility;
+            controller.transform.LookAt(facility.transform);
             controller.FacInteractUI.gameObject.SetActive(false);
             controller.FacWorkUI.gameObject.SetActive(true);
         }
@@ -30,6 +33,9 @@ namespace StateMachine.State
         public override void Exit()
         {
             base.Exit();
+
+
+            facility.OnExit();
 
             controller.FacWorkUI.gameObject.SetActive(false);
             controller.animator.SetBool(facility.AnimParam, false);

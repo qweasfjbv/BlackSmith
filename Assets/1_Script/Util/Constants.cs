@@ -18,6 +18,7 @@ public static class Constants
     // FOR INTERACTING
     public const string ANIM_PARAM_MINE = "isMine";
     public const string ANIM_PARAM_CHOP = "isChop";
+    public const string ANIM_PARAM_HAMMER = "isHammer";
 
 
     /// <summary>
