@@ -1,5 +1,6 @@
 using UnityEngine;
 using UI.Field;
+using System;
 
 namespace Facility
 {
@@ -8,33 +9,73 @@ namespace Facility
 
         protected WorkUI workUI;
 
+        // Timing Variables
         protected float maxTiming;          // Timing UI looks circle.
-        protected float elapsedTiming;      // current pin location (modular needed)
+        protected float elapsedTiming;      // current pin location
         protected float timingSpeed;        // pin move speed;
         protected float correctTimingRatio;      // 
         protected float correctTimingRange; // Doubled to right and left
 
+        // Progress Variables
+        protected float maxProgress;
+        protected float elapsedProgress;
+        protected float progressPerAction;
+
         protected string animParam;
         public string AnimParam { get => animParam; }
 
+        public Action OnWorkComplete;
 
+        #region ABSTRACT FUNCTIONS
         public abstract void ShowWorkUI();      // Show appropriate UI
         public abstract int ReturnItem(int itemId1, int itemId2);  // Return appropriate item with facilityId, itemId1, 2
-        public abstract void OnEnter();
-        public abstract void OnExit();
         public abstract void UpdateElapsedTiming();
+        #endregion
 
-        public void SetFacilityUI(WorkUI workUI)
+
+        #region VIRTUAL FUNCTIONS
+        public virtual void OnUpdate()          // Get Input during interacting (ex. space to timing)
+        {
+            UpdateElapsedTiming();
+            workUI.SetPinPos(elapsedTiming / maxTiming);
+
+        }
+        public virtual void OnEnter()
+        {
+            elapsedProgress = 0f;
+            elapsedTiming = 0f;
+            OnWorkComplete = null;
+        }
+        public virtual void OnExit()
+        {
+
+        }
+        #endregion
+
+
+        #region INIT FUNCTIONS
+        public void SetFacilityInfo(WorkUI workUI)  // Called in WorkState Class
         {
             this.workUI = workUI;
 
             workUI.SetTiming(maxTiming, correctTimingRatio, correctTimingRange);
         }
+        protected void SetAllInfoByFacID(int facId)
+        {
+            SetFacilityProgressInfo();
+            SetFacilityTimingInfo();
+            SetFacilityAnimInfo(Constants.ANIM_PARAM_HAMMER);
+
+        }
+        protected void SetFacilityProgressInfo(float progressPerAction = 20f)
+        {
+            this.maxProgress = 100f;
+            this.progressPerAction = progressPerAction;
+        }
         protected void SetFacilityAnimInfo(string animParam)
         {
             this.animParam = animParam;
         }
-
         protected void SetFacilityTimingInfo(float timingSpeed = 100f, float correctTImingRatio = 0.5f, float correctTImingRange = 20f)
         {
             this.maxTiming = 100f;
@@ -43,18 +84,7 @@ namespace Facility
             this.correctTimingRatio = correctTImingRatio; // half(0.5f) by default
             this.correctTimingRange = correctTImingRange;
         }
-
-        public virtual void OnTimingButtonPressed()
-        {
-
-        }
-
-        public virtual void OnUpdate()          // Get Input during interacting (ex. space to timing)
-        {
-            UpdateElapsedTiming();
-            workUI.SetPinPos(elapsedTiming / maxTiming);
-
-        }
+        #endregion
 
     }
 

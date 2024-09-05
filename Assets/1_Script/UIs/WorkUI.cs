@@ -1,22 +1,23 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
-
+using UnityEngine.UI;
 
 namespace UI.Field
 {
     public class WorkUI : MonoBehaviour
-    {
-
-        [SerializeField] private Transform player;
+    { 
+        private Transform player;  
 
         [SerializeField] private GameObject timingPin;
         [SerializeField] private GameObject corrTImingPin;
+        [SerializeField] private Image progressBar;
 
         private float maxRangeWidth;
+
         public void SetWorkUI(int facId, Transform player)
         {
             this.player = player;
 
-            // TODO : write on TMP
         }
 
         public void SetTiming(float maxTiming, float correctTiming, float correctTimingRange)
@@ -33,6 +34,11 @@ namespace UI.Field
         public void SetPinPos(float ratio)
         {
             timingPin.GetComponent<RectTransform>().anchoredPosition = new Vector3(maxRangeWidth * (ratio-0.5f), 0, 0);
+        }
+
+        public void SetProgressBar(float ratio)
+        {
+            progressBar.fillAmount = ratio;
         }
 
         void Update()

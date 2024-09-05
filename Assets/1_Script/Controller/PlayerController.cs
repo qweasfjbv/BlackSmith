@@ -23,12 +23,12 @@ namespace Controller
         [SerializeField] private float rayStartHeight;
         [SerializeField] private float rayLength;
         [SerializeField] private FacilityInteractUI facInteractUI;
-        [SerializeField] private WorkUI facWorktUI;
+        [SerializeField] private WorkUI facWorkUI;
 
 
         public float RollDuration { get => rollDuration; }
         public FacilityInteractUI FacInteractUI { get => facInteractUI; }
-        public WorkUI FacWorkUI { get => facWorktUI; }
+        public WorkUI FacWorkUI { get => facWorkUI; }
 
 
         private PlayerStateMachine stateMachine;

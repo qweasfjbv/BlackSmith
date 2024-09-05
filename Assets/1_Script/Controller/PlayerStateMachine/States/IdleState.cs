@@ -49,7 +49,6 @@ namespace StateMachine.State
         {
             base.LogicUpdate();
 
-            Debug.Log("STATE : IDLE");
             if (Mathf.Abs(vertInput) >= 0.9f || Mathf.Abs(horzInput) >= 0.9f) stateMachine.ChangeState(controller.runState);
         }
 

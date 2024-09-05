@@ -10,14 +10,15 @@ namespace Facility
 
         private void Awake()
         {
-            SetFacilityAnimInfo(Constants.ANIM_PARAM_HAMMER);
-            SetFacilityTimingInfo();
+            SetAllInfoByFacID(-1); // TODO : GET ID FROM RESOURCE MANAGER
         }
 
 
         public override void OnEnter()
         {
+            base.OnEnter();
             isOnActionCooltime = false;
+            workUI.SetProgressBar(0f);
         }
 
         public override void OnExit()
@@ -36,9 +37,9 @@ namespace Facility
                 isOnActionCooltime = true;
                 Invoke(nameof(ReleaseCooltime), actionCooltime);
 
-                if(Mathf.Abs(elapsedTiming-correctTimingRatio * maxTiming) < correctTimingRange)
+                if(Mathf.Abs(elapsedTiming-correctTimingRatio * maxTiming) < correctTimingRange/2)
                 {
-                    Debug.Log("OnTiming!");
+                    AddProgress();
                 }
                 else
                 {
@@ -71,6 +72,17 @@ namespace Facility
         private void ReleaseCooltime()
         {
             isOnActionCooltime = false;
+        }
+
+        private void AddProgress(float weight = 1f)
+        {
+            elapsedProgress += progressPerAction * weight;
+            workUI.SetProgressBar(elapsedProgress / maxProgress);
+
+            if (elapsedProgress + Mathf.Epsilon > maxProgress)
+            {
+                OnWorkComplete.Invoke();
+            }
         }
 
     }

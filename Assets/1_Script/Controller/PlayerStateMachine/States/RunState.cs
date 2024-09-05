@@ -65,8 +65,6 @@ namespace StateMachine.State
         {
             base.LogicUpdate();
 
-            Debug.Log("STATE : RUN");
-
             float speed = Mathf.Abs(vertInput) + Mathf.Abs(horzInput);
             float speedM = Mathf.Abs(vertInputM) + Mathf.Abs(horzInputM);
 

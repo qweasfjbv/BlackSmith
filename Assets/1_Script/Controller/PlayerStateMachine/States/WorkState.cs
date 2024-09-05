@@ -1,6 +1,7 @@
 using UnityEngine;
 using Controller;
 using Facility;
+using UI.Field;
 
 namespace StateMachine.State
 {
@@ -18,8 +19,11 @@ namespace StateMachine.State
         {
             base.Enter();
             facility = controller.RecentFacility;
-            facility.SetFacilityUI(controller.FacWorkUI);
+            controller.FacWorkUI.SetWorkUI(-1, controller.transform);
+            facility.SetFacilityInfo(controller.FacWorkUI);
             facility.OnEnter();
+
+            facility.OnWorkComplete += OnWorkCompleteFunc;
 
             controller.EraseAllAnimParam();
             controller.animator.SetBool(Constants.ANIM_PARAM_WORKREADY, true);
@@ -67,6 +71,15 @@ namespace StateMachine.State
         public override void PhysicsUpdate()
         {
             base.PhysicsUpdate();
+        }
+
+        private void OnWorkCompleteFunc()
+        {
+            // TODO : Play SuccessSound
+            // TODO : GetItem (Use "Return Item" Func
+            Debug.Log("OnWorkComplete Func");
+            controller.FacWorkUI.gameObject.SetActive(false);
+            stateMachine.ChangeState(controller.idleState);
         }
 
     }
