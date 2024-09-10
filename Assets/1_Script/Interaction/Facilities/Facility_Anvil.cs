@@ -5,6 +5,7 @@ namespace Facility
     public class Facility_Anvil : FacilityBase
     {
 
+
         private float actionCooltime = 1f;          // Related with Anim speed
         private bool isOnActionCooltime = false;
 
@@ -48,6 +49,9 @@ namespace Facility
             }
         }
 
+        // TOOD : Preliminaries - ResourceManager, Inventory
+        // Take an item out of the inventory, combine it
+        // and then place the new item back in the inventory.
         public override int ReturnItem(int itemId1, int itemId2)
         {
             return -1;

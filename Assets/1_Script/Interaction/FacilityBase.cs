@@ -9,28 +9,27 @@ namespace Facility
 
         protected WorkUI workUI;
 
-        // Timing Variables
+        /** Timing Variables **/
         protected float maxTiming;          // Timing UI looks circle.
         protected float elapsedTiming;      // current pin location
         protected float timingSpeed;        // pin move speed;
         protected float correctTimingRatio;      // 
         protected float correctTimingRange; // Doubled to right and left
 
-        // Progress Variables
+        /** Progress Variables **/
         protected float maxProgress;
         protected float elapsedProgress;
         protected float progressPerAction;
 
         protected string animParam;
         public string AnimParam { get => animParam; }
-
         public Action OnWorkComplete;
 
-        #region ABSTRACT FUNCTIONS
+
+        /** ABSTRACT FUNCTIONS **/
         public abstract void ShowWorkUI();      // Show appropriate UI
         public abstract int ReturnItem(int itemId1, int itemId2);  // Return appropriate item with facilityId, itemId1, 2
         public abstract void UpdateElapsedTiming();
-        #endregion
 
 
         #region VIRTUAL FUNCTIONS
@@ -62,6 +61,9 @@ namespace Facility
         }
         protected void SetAllInfoByFacID(int facId)
         {
+            // TODO : GetInfo From ResourceManager and give values;
+            FacilityInfo facInfo = Managers.Resource.GetFacilityInfo(facId);
+
             SetFacilityProgressInfo();
             SetFacilityTimingInfo();
             SetFacilityAnimInfo(Constants.ANIM_PARAM_HAMMER);
