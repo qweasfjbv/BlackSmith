@@ -1,44 +1,52 @@
 using UnityEngine;
 
-public class Managers : MonoBehaviour
+namespace Manager
 {
-
-    static Managers s_instance;
-    public static Managers Instance { get { return s_instance; } }
-
-    private ResourceManager _resource = new ResourceManager();
-    public static ResourceManager Resource { get { return Instance._resource; } }
-    
-
-    void Awake()
+    public class Managers : MonoBehaviour
     {
-        Init();
-    }
+
+        static Managers s_instance;
+
+        private InvenManager _inven = new InvenManager();
+        private ResourceManager _resource = new ResourceManager();
 
 
-    private void Init()
-    {
-        if (s_instance == null)
+        public static Managers Instance { get { return s_instance; } }
+
+        public static ResourceManager Resource { get { return Instance._resource; } }
+        public static InvenManager Inven { get { return Instance._inven; } }
+
+
+        void Awake()
         {
-            GameObject go = GameObject.Find("@Managers");
-            if (go == null)
+            Init();
+        }
+
+
+        private void Init()
+        {
+            if (s_instance == null)
             {
-                go = new GameObject { name = "@Managers" };
-                go.AddComponent<Managers>();
+                GameObject go = GameObject.Find("@Managers");
+                if (go == null)
+                {
+                    go = new GameObject { name = "@Managers" };
+                    go.AddComponent<Managers>();
+                }
+
+                DontDestroyOnLoad(go);
+                s_instance = go.GetComponent<Managers>();
+
+            }
+            else
+            {
+                Destroy(this.gameObject);
+                return;
             }
 
-            DontDestroyOnLoad(go);
-            s_instance = go.GetComponent<Managers>();
+            s_instance._resource.Init();
 
         }
-        else
-        {
-            Destroy(this.gameObject);
-            return;
-        }
-
-        s_instance._resource.Init();
 
     }
-
 }

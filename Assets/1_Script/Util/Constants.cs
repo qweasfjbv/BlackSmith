@@ -41,4 +41,10 @@ public static class Constants
     /// </summary>
     public const int LAYER_FACILITY = 1 << 8;
     public const int LAYER_RESOURCE = 1 << 9;
+
+
+    /// <summary>
+    /// Setting Constants for Gameplay
+    /// </summary>
+    public const int MAX_INVENTORY_SLOTS = 2;
 }
